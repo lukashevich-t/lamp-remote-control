@@ -2,6 +2,17 @@
 #include <ir_Lego_PF_BitStreamEncoder.h>
 
 #define LONG_PRESS_TIME 500
+// #define DEBUG
+
+#ifdef DEBUG
+  #define LOG(msg) Serial.println(msg);
+  #define LOG_HEX(value) Serial.println(value, HEX);
+  #define LOG_DEC(value) Serial.println(value, DEC);
+#else
+  #define LOG(msg)
+  #define LOG_HEX(value)
+  #define LOG_DEC(value)
+#endif
 
 byte LED_PIN = 9;           // the PWM pin the LED is attached to
 byte IR_PIN = 2;
@@ -16,6 +27,7 @@ decode_results results;
 
 void setup() {
   Serial.begin(9600); // выставляем скорость COM порта
+  LOG("This is debug message"); 
   irrecv.enableIRIn(); // запускаем прием
   pinMode(LED_PIN, OUTPUT);
   pinMode(BTN_MINUS_PIN, INPUT_PULLUP);
@@ -24,7 +36,7 @@ void setup() {
 
 void loop() {
   if ( irrecv.decode( &results )) { // если данные пришли
-    Serial.println( results.value, HEX ); // печатаем данные
+    LOG_HEX( results.value); // печатаем данные
     switch ( results.value ) {
       case 0xE0E006F9: // Make lighter
       case 0xE0E0E01F:
@@ -52,16 +64,16 @@ void loop() {
 void increaseBrightness() {
   if (level >= sizeof(levels) - 1) level = sizeof(levels) - 1;
   else ++level;
-  Serial.print("new level is ");
-  Serial.println(level, DEC);
+  LOG("new level is ");
+  LOG_DEC(level);
   analogWrite(LED_PIN, levels[level]);
 }
 
 void decreaseBrightness() {
   if (level <= 0) level = 0;
   else --level;
-  Serial.print("new level is ");
-  Serial.println(level, DEC);
+  LOG("new level is ");
+  LOG_DEC(level);
   analogWrite(LED_PIN, levels[level]);
 }
 
@@ -78,18 +90,6 @@ void minBrightness() {
 void checkButtons() {
   checkButton(BTN_MINUS_PIN,  decreaseBrightness, minBrightness);
   checkButton(BTN_PLUS_PIN,  increaseBrightness, maxBrightness);
-  //  switch (checkButton(BTN_MINUS_PIN, "-")) {
-  //    case 1:
-  //      decreaseBrightness();
-  //      Serial.println("-");
-  //      break;
-  //    case 2:
-  //      analogWrite(LED_PIN, 0);
-  //      Serial.println("off");
-  //      break;
-  //      break;
-  //  }
-  //  checkButton(BTN_PLUS_PIN, "+");
 }
 
 /**
