@@ -14,19 +14,21 @@
   #define LOG_DEC(value)
 #endif
 
-byte LED_PIN = 9;           // the PWM pin the LED is attached to
-byte IR_PIN = 2;
-char level = 0;    // how bright the LED is
-uint8_t levels[] = {0, 30, 60, 110, 170, 255};
-byte BTN_MINUS_PIN = 7;
-byte BTN_PLUS_PIN = 8;
+byte LED_PIN = 9;     // PIN, к которому подключена нагрузка (светодиоды)
+byte IR_PIN = 2;      // PIN для подключения инфракрасного приёмника
+char level = 0;       // Начальный уровень яркости при подаче питания
+uint8_t levels[] = {0, 30, 60, 110, 170, 255}; // Уровни яркости
+byte BTN_MINUS_PIN = 7;   // pin для подключения кнопки МИНУС (уменьшение яркости/выключение)
+byte BTN_PLUS_PIN = 8;    // pin для подключения кнопки ПЛЮС (увеличение яркости/полная яркость)
 
 
 IRrecv irrecv(IR_PIN); // указываем вывод, к которому подключен приемник
 decode_results results;
 
 void setup() {
+#ifdef DEBUG
   Serial.begin(9600); // выставляем скорость COM порта
+#endif
   LOG("This is debug message"); 
   irrecv.enableIRIn(); // запускаем прием
   pinMode(LED_PIN, OUTPUT);
