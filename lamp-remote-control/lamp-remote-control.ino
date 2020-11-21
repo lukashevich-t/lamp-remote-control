@@ -2,21 +2,21 @@
 #include <ir_Lego_PF_BitStreamEncoder.h>
 
 #define LONG_PRESS_TIME 500
-// #define DEBUG
+#define DEBUG
 
 #ifdef DEBUG
-  #define LOG(msg) Serial.println(msg);
-  #define LOG_HEX(value) Serial.println(value, HEX);
-  #define LOG_DEC(value) Serial.println(value, DEC);
+#define LOG(msg) Serial.println(msg);
+#define LOG_HEX(value) Serial.println(value, HEX);
+#define LOG_DEC(value) Serial.println(value, DEC);
 #else
-  #define LOG(msg)
-  #define LOG_HEX(value)
-  #define LOG_DEC(value)
+#define LOG(msg)
+#define LOG_HEX(value)
+#define LOG_DEC(value)
 #endif
 
-byte LED_PIN = 9;     // PIN, к которому подключена нагрузка (светодиоды)
-byte IR_PIN = 2;      // PIN для подключения инфракрасного приёмника
-char level = 0;       // Начальный уровень яркости при подаче питания
+byte LED_PIN = 9;         // PIN, к которому подключена нагрузка (светодиоды)
+byte IR_PIN = 2;          // PIN для подключения инфракрасного приёмника
+char level = 0;           // Начальный уровень яркости при подаче питания
 uint8_t levels[] = {0, 30, 60, 110, 170, 255}; // Уровни яркости
 byte BTN_MINUS_PIN = 7;   // pin для подключения кнопки МИНУС (уменьшение яркости/выключение)
 byte BTN_PLUS_PIN = 8;    // pin для подключения кнопки ПЛЮС (увеличение яркости/полная яркость)
@@ -29,7 +29,7 @@ void setup() {
 #ifdef DEBUG
   Serial.begin(9600); // выставляем скорость COM порта
 #endif
-  LOG("This is debug message"); 
+  LOG("This is debug message");
   irrecv.enableIRIn(); // запускаем прием
   pinMode(LED_PIN, OUTPUT);
   pinMode(BTN_MINUS_PIN, INPUT_PULLUP);
@@ -95,10 +95,10 @@ void checkButtons() {
 }
 
 /**
- * Опрашивает кнопку, подключенную к пину, номер которого передан в аргументе.
- * При коротком нажатии вызывает shortFunc.
- * При длинном нажатии вызывает longFunc.
- */
+   Опрашивает кнопку, подключенную к пину, номер которого передан в аргументе.
+   При коротком нажатии вызывает shortFunc.
+   При длинном нажатии вызывает longFunc.
+*/
 void checkButton(byte button, void (*shortFunc )(), void (*longFunc )()) {
   if (digitalRead(button) == HIGH) return;
   delay(50); // Ждём окончания дребезга
